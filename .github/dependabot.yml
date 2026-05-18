@@ -16,22 +16,6 @@ updates:
     labels:
       - "dependencies"
 
-  - package-ecosystem: "npm"
-    directory: "/server-app"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 5
-    labels:
-      - "dependencies"
-
-  - package-ecosystem: "cargo"
-    directory: "/server-app-tauri"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 5
-    labels:
-      - "dependencies"
-
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
