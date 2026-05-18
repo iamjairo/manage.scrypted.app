@@ -1,0 +1,68 @@
+# =============================================================================
+# Caddyfile.advanced — path-matched variant (reference only, NOT recommended)
+# =============================================================================
+#
+# ⚠  WARNING: This approach is MORE FRAGILE than the simple /scrypted/* split
+# in the primary Caddyfile.  Scrypted's internal routing paths (e.g.
+# /endpoint/, /web/, /static/, /login, /api/) can change between Scrypted
+# releases without notice, and any missed path breaks the integration.
+#
+# Use the primary Caddyfile (the "simple split" pattern with /scrypted/*) for
+# all real deployments.  This file is kept only as documentation for operators
+# who need to understand the alternative approach.
+#
+# =============================================================================
+
+{
+    email you@example.com
+}
+
+scrypted.example.com {
+
+    encode zstd gzip
+
+    # ------------------------------------------------------------------
+    # Path matchers — enumerate every known Scrypted route explicitly.
+    # This list must be kept in sync with Scrypted upstream; any new
+    # path added to the server that is not listed here will serve 404
+    # from the UI file server instead of being proxied.
+    # ------------------------------------------------------------------
+    @scrypted_paths path \
+        /endpoint/* \
+        /web/*      \
+        /static/*   \
+        /login*     \
+        /logout*    \
+        /api/*
+
+    handle @scrypted_paths {
+        reverse_proxy https://127.0.0.1:10443 {
+            transport http {
+                tls_insecure_skip_verify
+            }
+        }
+    }
+
+    # Everything else → Vue SPA (no /scrypted/ prefix needed here since
+    # Scrypted paths are served directly at the root).
+    handle {
+        root * /srv/ui
+        try_files {path} /index.html
+        file_server
+    }
+}
+
+# =============================================================================
+# Why the simple split (/scrypted/*) is preferred
+# =============================================================================
+#
+# 1. You control the namespace.  Scrypted traffic lives under /scrypted/ by
+#    convention you set — it never bleeds into the UI's URL space.
+# 2. Zero maintenance.  Adding a new Scrypted plugin endpoint doesn't require
+#    updating the Caddyfile.
+# 3. The UI's Scrypted API base path is a single config value (set to
+#    `/scrypted/`), not an implicit "everything I didn't serve myself" catch.
+# 4. WebSocket upgrades work identically for both approaches — Caddy handles
+#    the Upgrade header automatically regardless of which matcher fires.
+#
+# =============================================================================

@@ -1,0 +1,41 @@
+# Scrypted + Caddy reverse-proxy stack
+#
+# host networking is required for:
+#   - camera discovery (ONVIF, mDNS/Bonjour)
+#   - HomeKit pairing and accessory broadcast
+#   - RTSP streams on arbitrary ports
+#   - NVR/recording direct access
+#
+# With network_mode: host, Caddy reaches Scrypted via 127.0.0.1:10443
+# (the Scrypted HTTPS port) without any additional port mapping.
+
+services:
+  scrypted:
+    # Pin to a specific release tag (e.g. ghcr.io/koush/scrypted:v0.x.y) for
+    # reproducible deployments; `latest` always tracks the newest build.
+    image: ghcr.io/koush/scrypted:latest
+    container_name: scrypted
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - ./scrypted_volume:/server/volume
+    environment:
+      # Allow Scrypted to bind raw sockets for RTSP/HomeKit/mDNS on host net.
+      SCRYPTED_INSECURE_USE_RAW_SOCKETS: "true"
+
+  caddy:
+    # Pin to a specific minor/patch version (e.g. caddy:2.9) for reproducible
+    # deployments; `caddy:2` tracks the latest 2.x release.
+    image: caddy:2
+    container_name: caddy
+    network_mode: host
+    restart: unless-stopped
+    # With network_mode: host, Caddy binds :80 and :443 directly on the host
+    # and reaches Scrypted at 127.0.0.1:10443 (no published ports needed).
+    depends_on:
+      - scrypted
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro   # Caddy site config
+      - ./ui:/srv/ui:ro                        # built Vue UI (dist/ copied here)
+      - ./caddy_data:/data                     # ACME certs / Caddy state
+      - ./caddy_config:/config                 # Caddy runtime config cache

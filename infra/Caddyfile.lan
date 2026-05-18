@@ -1,0 +1,64 @@
+# =============================================================================
+# Caddyfile.lan — LAN-only with Caddy-minted self-signed certificate
+# =============================================================================
+#
+# Use this file when you do NOT have a public domain or cannot expose ports
+# 80/443 to the internet.  Caddy will mint a local CA and sign a certificate
+# for the site address below entirely offline.
+#
+# To switch to LAN mode:
+#   cp Caddyfile.lan Caddyfile
+#   docker compose restart caddy
+#
+# Clients must trust Caddy's local root CA.  Two ways to do this:
+#
+#   1. Inside the container (installs in the OS trust store of each client):
+#        docker exec caddy caddy trust
+#
+#   2. Manually export and import on each client device:
+#        caddy_data/caddy/pki/authorities/local/root.crt
+#      Import that file into your OS / browser trust store.
+#
+# The placeholder `scrypted.lan` resolves on most networks via mDNS / .local
+# multicast.  You may use a custom hostname from your local DNS or /etc/hosts.
+# =============================================================================
+
+# No global email needed — `tls internal` never contacts Let's Encrypt.
+
+# ---------------------------------------------------------------------------
+# Site address — replace with your LAN hostname if desired
+# ---------------------------------------------------------------------------
+https://scrypted.lan {
+
+    # Use Caddy's built-in local CA to mint a self-signed certificate.
+    # No internet access, no ACME challenge — cert is generated locally.
+    tls internal
+
+    # Compress responses with zstd (preferred) or gzip for older clients.
+    encode zstd gzip
+
+    # ------------------------------------------------------------------
+    # Scrypted API + WebSocket proxy  →  /scrypted/*
+    # ------------------------------------------------------------------
+    # Same pattern as the public Caddyfile.  All Scrypted API traffic and
+    # WebSocket connections are forwarded to the local Scrypted container.
+    # `tls_insecure_skip_verify` is required because Scrypted's own HTTPS
+    # listener on 127.0.0.1:10443 uses a self-signed certificate.
+    # ------------------------------------------------------------------
+    handle_path /scrypted/* {
+        reverse_proxy https://127.0.0.1:10443 {
+            transport http {
+                tls_insecure_skip_verify
+            }
+        }
+    }
+
+    # ------------------------------------------------------------------
+    # Custom management UI  →  everything else
+    # ------------------------------------------------------------------
+    handle {
+        root * /srv/ui
+        try_files {path} /index.html
+        file_server
+    }
+}

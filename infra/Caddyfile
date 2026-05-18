@@ -1,0 +1,62 @@
+# =============================================================================
+# Caddyfile — public domain with automatic HTTPS via Let's Encrypt
+# =============================================================================
+#
+# Replace `scrypted.example.com` with your real domain and set your email
+# in the global options block below.  As soon as DNS points at this host and
+# ports 80/443 are reachable from the internet, Caddy will obtain and renew
+# a certificate from Let's Encrypt automatically — no extra steps required.
+#
+# For LAN-only (no public domain), see Caddyfile.lan instead.
+# =============================================================================
+
+{
+    # Email used for ACME (Let's Encrypt) account registration and expiry
+    # notifications.  Replace with your real address before going live.
+    email you@example.com
+}
+
+# ---------------------------------------------------------------------------
+# Site address — replace with your actual domain
+# ---------------------------------------------------------------------------
+scrypted.example.com {
+
+    # Compress responses with zstd (preferred) or gzip for older clients.
+    encode zstd gzip
+
+    # ------------------------------------------------------------------
+    # Scrypted API + WebSocket proxy  →  /scrypted/*
+    # ------------------------------------------------------------------
+    # All Scrypted API calls, WebSocket connections, and plugin traffic
+    # are routed here.  Set the UI's Scrypted API base path to `/scrypted/`
+    # so that fetch/WS calls from the Vue app hit this block.
+    #
+    # `tls_insecure_skip_verify` is needed because Scrypted uses a
+    # self-signed cert on its local HTTPS listener (127.0.0.1:10443).
+    # Traffic between Caddy and Scrypted stays on loopback — only the
+    # public-facing Caddy ↔ browser leg is secured by a real cert.
+    #
+    # Caddy's reverse_proxy handles WebSocket upgrades automatically;
+    # no extra header manipulation is required.
+    # ------------------------------------------------------------------
+    handle_path /scrypted/* {
+        reverse_proxy https://127.0.0.1:10443 {
+            transport http {
+                tls_insecure_skip_verify
+            }
+        }
+    }
+
+    # ------------------------------------------------------------------
+    # Custom management UI  →  everything else
+    # ------------------------------------------------------------------
+    # Serves the built Vue SPA from /srv/ui (copy dist/ here).
+    # `try_files` enables HTML5 History Mode: any unknown path falls
+    # back to index.html so client-side routing works correctly.
+    # ------------------------------------------------------------------
+    handle {
+        root * /srv/ui
+        try_files {path} /index.html
+        file_server
+    }
+}
