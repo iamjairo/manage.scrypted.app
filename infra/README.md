@@ -18,5 +18,5 @@ To switch to the sub-path Caddy variant:
 
 ```sh
 cp Caddyfile.subpath Caddyfile
-docker exec caddy caddy reload --config /etc/caddy/Caddyfile
+docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile
 ```

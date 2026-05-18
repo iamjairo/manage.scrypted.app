@@ -23,6 +23,10 @@
 selfhosted.example.com {
     encode zstd gzip
 
+    # Normalize no-trailing-slash paths so both forms work.
+    redir /dashboard /dashboard/
+    redir /dashboard/scrypted /dashboard/scrypted/
+
     # Scrypted API + WS, accessible at /dashboard/scrypted/*
     handle_path /dashboard/scrypted/* {
         reverse_proxy https://127.0.0.1:10443 {
@@ -39,6 +43,6 @@ selfhosted.example.com {
         file_server
     }
 
-    # Anything else falls through to your other handlers / sites.
-    # Add additional `handle` blocks here for other apps on this domain.
+    # Requests not matched above return 404 by default.
+    # Add additional `handle` blocks below for other apps on this domain.
 }
