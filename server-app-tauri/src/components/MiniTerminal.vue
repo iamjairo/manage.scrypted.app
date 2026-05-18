@@ -28,9 +28,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
-import { Terminal } from 'xterm';
-import { FitAddon } from 'xterm-addon-fit';
-import 'xterm/css/xterm.css';
+import { Terminal } from '@xterm/xterm';
+import { FitAddon } from '@xterm/addon-fit';
+import '@xterm/xterm/css/xterm.css';
 import { scrypted } from '../api';
 import type { UnlistenFn } from '@tauri-apps/api/event';
 
@@ -48,30 +48,33 @@ async function openTerminal() {
 
   sessionId = crypto.randomUUID();
 
-  term = new Terminal({ theme: { background: '#0d1117', foreground: '#c9d1d9' } });
-  fitAddon = new FitAddon();
-  term.loadAddon(fitAddon);
-  term.open(termEl.value);
-  fitAddon.fit();
+  const t = new Terminal({ theme: { background: '#0d1117', foreground: '#c9d1d9' } });
+  const fa = new FitAddon();
+  t.loadAddon(fa);
+  t.open(termEl.value);
+  fa.fit();
 
-  term.onData((data) => {
+  t.onData((data) => {
     scrypted.term.write(sessionId, data).catch(() => {});
   });
 
+  term = t;
+  fitAddon = fa;
+
   try {
     unlistenData = await scrypted.term.onData(sessionId, (chunk) => {
-      term?.write(chunk);
+      t.write(chunk);
     });
     unlistenExit = await scrypted.term.onExit(sessionId, () => {
       open.value = false;
-      term?.write('\r\n[Process exited]\r\n');
+      t.write('\r\n[Process exited]\r\n');
     });
 
-    const { cols, rows } = term;
+    const { cols, rows } = t;
     await scrypted.term.open(sessionId, cols, rows);
     open.value = true;
   } catch (e) {
-    term.write(`\r\n[Error: ${e}]\r\n`);
+    t.write(`\r\n[Error: ${e}]\r\n`);
   }
 }
 

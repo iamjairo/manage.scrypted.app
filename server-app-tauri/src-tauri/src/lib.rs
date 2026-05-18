@@ -40,9 +40,12 @@ fn svc_ip() -> String {
 #[tauri::command]
 async fn logs_start(app: AppHandle, state: State<'_, LogState>) -> Result<(), String> {
     let mut guard = state.lock().await;
-    if guard.0.is_some() {
+    // Only reuse an existing handle if the task is still running.
+    // A finished handle (e.g., Docker error or container gone) must be replaced.
+    if guard.0.as_ref().map(|h| !h.is_finished()).unwrap_or(false) {
         return Ok(()); // already streaming
     }
+    guard.0 = None; // clear any finished handle
     let handle = docker::stream_logs(move |line| {
         let _ = app.emit("logs:data", line);
     })

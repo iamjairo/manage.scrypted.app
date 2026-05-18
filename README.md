@@ -15,4 +15,4 @@ cd scrypted
 
 ## Server App
 
-A standalone desktop launcher for the Scrypted Docker container is available in [`server-app-tauri/`](./server-app-tauri/). It provides container start/stop, LAN IP display, live log streaming, and an integrated terminal. For a smaller native build see [`server-app-tauri/`](./server-app-tauri/) (experimental Tauri port — same UI, ~10 MB binary).
+A standalone desktop launcher for the Scrypted Docker container is available in [`server-app-tauri/`](./server-app-tauri/) — an experimental Tauri 2 port that provides container start/stop, LAN IP display, live log streaming, and an integrated terminal in a ~10 MB binary.

@@ -53,7 +53,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { scrypted } from '../api';
-import type { ContainerStatus } from '../types/scrypted.d';
+import type { ContainerStatus } from '../types/scrypted';
 
 const status = ref<ContainerStatus | null>(null);
 const ip = ref<string>('');

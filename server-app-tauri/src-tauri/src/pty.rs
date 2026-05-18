@@ -1,5 +1,5 @@
 use dashmap::DashMap;
-use portable_pty::{native_pty_system, CommandBuilder, MasterPty, PtySize};
+use portable_pty::{native_pty_system, Child, CommandBuilder, MasterPty, PtySize};
 use std::io::{Read, Write};
 use std::sync::{Arc, Mutex};
 use tauri::{AppHandle, Emitter};
@@ -7,11 +7,11 @@ use tauri::{AppHandle, Emitter};
 struct PtySession {
     writer: Arc<Mutex<Box<dyn Write + Send>>>,
     master: Arc<Mutex<Box<dyn MasterPty + Send>>>,
+    child: Arc<Mutex<Box<dyn Child + Send + Sync>>>,
 }
 
-// SAFETY: portable-pty MasterPty is documented as Send.
-unsafe impl Send for PtySession {}
-unsafe impl Sync for PtySession {}
+// All fields are Arc<Mutex<T: Send>>, which is automatically Send + Sync;
+// no unsafe impls are required.
 
 lazy_static::lazy_static! {
     static ref SESSIONS: DashMap<String, PtySession> = DashMap::new();
@@ -30,7 +30,7 @@ pub fn open(app: AppHandle, id: String, cols: u16, rows: u16) -> Result<(), Stri
     cmd.cwd(&home);
     cmd.env("TERM", "xterm-256color");
 
-    pair.slave
+    let child = pair.slave
         .spawn_command(cmd)
         .map_err(|e| e.to_string())?;
 
@@ -41,6 +41,8 @@ pub fn open(app: AppHandle, id: String, cols: u16, rows: u16) -> Result<(), Stri
     let writer = Arc::new(Mutex::new(writer));
     let master: Arc<Mutex<Box<dyn MasterPty + Send>>> =
         Arc::new(Mutex::new(pair.master));
+    let child: Arc<Mutex<Box<dyn Child + Send + Sync>>> =
+        Arc::new(Mutex::new(child));
 
     let app_clone = app.clone();
     let id_clone = id.clone();
@@ -61,7 +63,7 @@ pub fn open(app: AppHandle, id: String, cols: u16, rows: u16) -> Result<(), Stri
         SESSIONS.remove(&id_clone);
     });
 
-    SESSIONS.insert(id, PtySession { writer, master });
+    SESSIONS.insert(id, PtySession { writer, master, child });
     Ok(())
 }
 
@@ -96,6 +98,13 @@ pub fn resize(id: &str, cols: u16, rows: u16) -> Result<(), String> {
 }
 
 pub fn close(id: &str) -> Result<(), String> {
-    SESSIONS.remove(id);
+    if let Some((_, session)) = SESSIONS.remove(id) {
+        // Explicitly kill the child process before dropping the session.
+        // Dropping the master (which happens when the Arc refcount reaches zero)
+        // will also close the PTY and cause the reader thread to exit.
+        if let Ok(mut child) = session.child.lock() {
+            let _ = child.kill();
+        }
+    }
     Ok(())
 }

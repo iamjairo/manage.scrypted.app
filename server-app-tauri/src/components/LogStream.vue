@@ -42,6 +42,8 @@ import { ref, nextTick, onUnmounted } from 'vue';
 import { scrypted } from '../api';
 import type { UnlistenFn } from '@tauri-apps/api/event';
 
+const MAX_LINES = 5000;
+
 const lines = ref<string[]>([]);
 const streaming = ref(false);
 const logContainer = ref<HTMLDivElement | null>(null);
@@ -53,6 +55,10 @@ async function startStream() {
   try {
     unlisten = await scrypted.onLog((line) => {
       lines.value.push(line);
+      // Ring buffer: evict oldest lines when over the cap
+      if (lines.value.length > MAX_LINES) {
+        lines.value.splice(0, lines.value.length - MAX_LINES);
+      }
       nextTick(() => {
         if (logContainer.value) {
           logContainer.value.scrollTop = logContainer.value.scrollHeight;
