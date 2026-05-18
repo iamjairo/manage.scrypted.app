@@ -1,0 +1,48 @@
+# Caddyfile.subpath
+#
+# Mounts the customized Scrypted management UI at /dashboard/ and proxies
+# Scrypted API + WebSocket traffic at /dashboard/scrypted/.
+#
+# Use case: you already host other apps at selfhosted.example.com and want
+# Scrypted to live at selfhosted.example.com/dashboard/ without consuming
+# a dedicated subdomain.
+#
+# Replace `selfhosted.example.com` and the `email` value before deploying.
+#
+# IMPORTANT build/runtime notes:
+# 1) Build the Vue app with a matching base path from the repo root:
+#    npm run build -- --base=/dashboard/
+#    (or set `base: '/dashboard/'` in vite.config.mts for production builds).
+# 2) Configure the UI's Scrypted client to use /dashboard/scrypted/ as its API base URL.
+# 3) WebSockets are proxied transparently; Caddy automatically upgrades WS connections.
+
+{
+    email you@example.com
+}
+
+selfhosted.example.com {
+    encode zstd gzip
+
+    # Normalize no-trailing-slash paths so both forms work.
+    redir /dashboard /dashboard/
+    redir /dashboard/scrypted /dashboard/scrypted/
+
+    # Scrypted API + WS, accessible at /dashboard/scrypted/*
+    handle_path /dashboard/scrypted/* {
+        reverse_proxy https://127.0.0.1:10443 {
+            transport http {
+                tls_insecure_skip_verify
+            }
+        }
+    }
+
+    # Customized UI at /dashboard/* — Vue SPA with history fallback.
+    handle_path /dashboard/* {
+        root * /srv/ui
+        try_files {path} /index.html
+        file_server
+    }
+
+    # Requests not matched above return 404 by default.
+    # Add additional `handle` blocks below for other apps on this domain.
+}
