@@ -60,7 +60,9 @@ jobs:
 
       - name: Set up Rust (Rust matrix only)
         if: steps.guard.outputs.skip != 'true' && matrix.language == 'rust'
-        uses: dtolnay/rust-toolchain@stable
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
 
       - name: Build Rust (Rust matrix only)
         if: steps.guard.outputs.skip != 'true' && matrix.language == 'rust'
