@@ -21,19 +21,34 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate required secrets
+        run: |
+          if [ -z "${{ secrets.FONTAWESOME_NPM_TOKEN }}" ]; then
+            echo "::warning::Skipping deploy: FONTAWESOME_NPM_TOKEN is not configured."
+          else
+            echo "FONTAWESOME_NPM_TOKEN is configured."
+          fi
+
   # Single deploy job since we're just deploying
   deploy:
+    needs: preflight
+    if: ${{ secrets.FONTAWESOME_NPM_TOKEN != '' }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: manage
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: koush/scrypted
           path: scrypted
@@ -55,7 +70,7 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v6
       - name: fontawesome token
         run: |
           npm config set "@fortawesome:registry" https://npm.fontawesome.com/
@@ -79,7 +94,7 @@ jobs:
         working-directory: ./manage
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: './manage/dist'
       - name: Deploy to GitHub Pages
