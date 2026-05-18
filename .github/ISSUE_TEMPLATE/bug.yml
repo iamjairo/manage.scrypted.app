@@ -1,0 +1,55 @@
+name: Bug report
+description: Something isn't working as expected.
+title: "[bug] "
+labels: ["bug", "needs-triage"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - "src/ (Vue SPA)"
+        - "infra/ (Docker / Caddy)"
+        - "server-app/ (Electron)"
+        - "server-app-tauri/ (Tauri)"
+        - "agent-harness/"
+        - ".github/ / CI"
+        - "Unsure"
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the bug.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: OS, browser (for UI bugs), Scrypted version, Docker version, etc.
+      placeholder: |
+        - OS:
+        - Browser:
+        - Scrypted version:
+        - Docker version:
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / screenshots
+      render: shell

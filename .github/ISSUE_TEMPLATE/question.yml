@@ -1,0 +1,21 @@
+name: Question
+description: Ask a question about deploying, customizing, or using this fork.
+title: "[question] "
+labels: ["question", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before opening a question issue, check the README and the per-directory
+        READMEs in `infra/`, `server-app/`, and `server-app-tauri/`.
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What have you tried so far? What's your setup?

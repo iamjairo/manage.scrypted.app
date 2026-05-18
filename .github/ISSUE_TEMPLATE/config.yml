@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/iamjairo/manage.scrypted.app/security/advisories/new
+    about: Use GitHub's private vulnerability reporting — do not open a public issue.
+  - name: Upstream UI issue (koush/manage.scrypted.app)
+    url: https://github.com/koush/manage.scrypted.app/issues
+    about: Report bugs in the upstream management UI here.
+  - name: Scrypted core / plugin issue
+    url: https://github.com/koush/scrypted/issues
+    about: Report bugs in the Scrypted server itself or its plugins.
+  - name: Scrypted Discord
+    url: https://discord.gg/scrypted
+    about: Community support and discussion.

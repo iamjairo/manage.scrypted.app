@@ -1,0 +1,24 @@
+# Each line is a file pattern followed by one or more owners. Owners are
+# auto-requested for review on PRs touching matching paths.
+#
+# Until other collaborators join the repo, everything routes to @iamjairo.
+
+# Default owner for everything not matched below
+*                              @iamjairo
+
+# Vue SPA (fork of upstream)
+/src/                          @iamjairo
+/public/                       @iamjairo
+
+# Deployment infra
+/infra/                        @iamjairo
+
+# Desktop launchers
+/server-app/                   @iamjairo
+/server-app-tauri/             @iamjairo
+
+# LLM agent harness
+/agent-harness/                @iamjairo
+
+# CI / automation / repo hygiene
+/.github/                      @iamjairo
