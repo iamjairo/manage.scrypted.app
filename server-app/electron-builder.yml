@@ -1,0 +1,16 @@
+appId: app.scrypted.launcher
+productName: Scrypted Server App
+files:
+  - dist/**
+  - dist-electron/**
+  - package.json
+asarUnpack:
+  - node_modules/node-pty/**
+linux:
+  category: Utility
+  target:
+    - AppImage
+    - deb
+npmRebuild: true
+nodeGypRebuild: true
+buildDependenciesFromSource: true
