@@ -1,0 +1,31 @@
+{
+    # Caddy's internal CA — produces a self-signed cert.
+    # Trust it once on your client devices to silence the browser warning.
+    local_certs
+}
+
+# Replace with your Linux host's LAN IP or a .local hostname.
+https://scrypted.lan {
+    encode zstd gzip
+
+    # 1) WebSockets and Scrypted API endpoints must be proxied to Scrypted.
+    #    Scrypted's HTTPS is self-signed, so tell Caddy to skip verification.
+    @scrypted_paths {
+        path /endpoint/* /web/* /static/* /login* /logout* /api/*
+    }
+    reverse_proxy @scrypted_paths https://127.0.0.1:10443 {
+        transport http {
+            tls_insecure_skip_verify
+        }
+        header_up Host {host}
+        header_up X-Forwarded-Proto https
+    }
+
+    # 2) WebSocket upgrade path (Scrypted uses /endpoint and /web for WS too,
+    #    matched above). Caddy auto-handles Upgrade headers in reverse_proxy.
+
+    # 3) Everything else = your customized UI static build.
+    root * /srv/ui
+    try_files {path} /index.html
+    file_server
+}

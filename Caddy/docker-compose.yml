@@ -1,0 +1,28 @@
+services:
+  scrypted:
+    image: ghcr.io/koush/scrypted:latest
+    container_name: scrypted
+    restart: unless-stopped
+    # Host networking is strongly recommended by Scrypted for camera discovery,
+    # HomeKit, mDNS, RTSP, etc. Caddy below also uses host networking so they
+    # can reach each other on 127.0.0.1.
+    network_mode: host
+    volumes:
+      - ./scrypted_volume:/server/volume
+    environment:
+      - SCRYPTED_WEBHOOK_UPDATE_AUTHORIZATION=
+      - SCRYPTED_INSECURE_USE_RAW_SOCKETS=true
+    # Scrypted listens on 10080 (http) and 10443 (https) on the host.
+
+  caddy:
+    image: caddy:2
+    container_name: caddy
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./ui:/srv/ui:ro
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+    depends_on:
+      - scrypted

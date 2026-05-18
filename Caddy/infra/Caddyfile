@@ -1,0 +1,19 @@
+{
+    email you@iamjairo.com
+}
+
+scrypted-linux.selfhosted.iamjairo.com {
+    encode zstd gzip
+
+    handle_path /scrypted/* {
+        reverse_proxy https://127.0.0.1:10443 {
+            transport http { tls_insecure_skip_verify }
+        }
+    }
+
+    handle {
+        root * /srv/ui
+        try_files {path} /index.html
+        file_server
+    }
+}
