@@ -1,0 +1,83 @@
+version: 2
+updates:
+  # Root Vue SPA
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Etc/UTC"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "area:frontend"
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps-dev"
+      include: "scope"
+    groups:
+      vue-ecosystem:
+        patterns: ["vue", "vue-*", "@vue/*", "vuetify", "vite", "@vitejs/*", "unplugin-*"]
+      types:
+        patterns: ["@types/*"]
+      lint-and-format:
+        patterns: ["eslint", "eslint-*", "@typescript-eslint/*", "prettier", "prettier-*"]
+
+  - package-ecosystem: "npm"
+    directory: "/agent-harness"
+    schedule: { interval: "weekly", day: "monday" }
+    open-pull-requests-limit: 5
+    labels: ["dependencies", "area:agent-harness"]
+    commit-message: { prefix: "deps(agent-harness)" }
+
+  - package-ecosystem: "npm"
+    directory: "/server-app"
+    schedule: { interval: "weekly", day: "monday" }
+    open-pull-requests-limit: 10
+    labels: ["dependencies", "area:server-app"]
+    commit-message: { prefix: "deps(server-app)" }
+    groups:
+      electron-stack:
+        patterns: ["electron", "electron-*"]
+      native-modules:
+        patterns: ["node-pty", "dockerode"]
+      xterm:
+        patterns: ["xterm", "xterm-*"]
+
+  - package-ecosystem: "npm"
+    directory: "/server-app-tauri"
+    schedule: { interval: "weekly", day: "monday" }
+    open-pull-requests-limit: 10
+    labels: ["dependencies", "area:server-app-tauri"]
+    commit-message: { prefix: "deps(server-app-tauri)" }
+    groups:
+      tauri:
+        patterns: ["@tauri-apps/*"]
+
+  - package-ecosystem: "cargo"
+    directory: "/server-app-tauri/src-tauri"
+    schedule: { interval: "weekly", day: "monday" }
+    open-pull-requests-limit: 10
+    labels: ["dependencies", "area:server-app-tauri", "lang:rust"]
+    commit-message: { prefix: "deps(tauri-rs)" }
+    groups:
+      tauri-crates:
+        patterns: ["tauri", "tauri-*"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule: { interval: "weekly", day: "monday" }
+    open-pull-requests-limit: 5
+    labels: ["dependencies", "area:ci"]
+    commit-message: { prefix: "ci" }
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: "docker-compose"
+    directory: "/infra"
+    schedule: { interval: "weekly", day: "monday" }
+    open-pull-requests-limit: 5
+    labels: ["dependencies", "area:infra"]
+    commit-message: { prefix: "deps(infra)" }
