@@ -1,0 +1,169 @@
+name: Sync fork with upstream
+
+on:
+  schedule:
+    - cron: "30 5 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Force reset main to upstream/main (destructive; bypasses PR fallback)"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: upstream-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      UPSTREAM_REPO: koush/manage.scrypted.app
+      UPSTREAM_BRANCH: main
+      TARGET_BRANCH: main
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sync from upstream
+        id: sync
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FORCE_INPUT: ${{ github.event.inputs.force || 'false' }}
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Always fetch upstream and target branch with full history so decisions are based on
+          # current refs. This keeps the default path safe and deterministic.
+          if git remote get-url upstream >/dev/null 2>&1; then
+            git remote set-url upstream "https://github.com/${UPSTREAM_REPO}.git"
+          else
+            git remote add upstream "https://github.com/${UPSTREAM_REPO}.git"
+          fi
+
+          git fetch --prune upstream "${UPSTREAM_BRANCH}:refs/remotes/upstream/${UPSTREAM_BRANCH}"
+          git fetch --prune origin "${TARGET_BRANCH}:refs/remotes/origin/${TARGET_BRANCH}"
+
+          git checkout "${TARGET_BRANCH}"
+          git reset --hard "origin/${TARGET_BRANCH}"
+
+          # Safe-by-default path: only fast-forward main. If this succeeds, either we're already
+          # up-to-date or we can push a linear update with no rewritten history.
+          if git merge --ff-only "upstream/${UPSTREAM_BRANCH}"; then
+            if git diff --quiet "origin/${TARGET_BRANCH}"..HEAD; then
+              outcome="up-to-date"
+              details="No changes needed; fork already matches upstream."
+            else
+              git push origin "${TARGET_BRANCH}"
+              outcome="fast-forwarded"
+              details="Successfully fast-forwarded ${TARGET_BRANCH} from upstream/${UPSTREAM_BRANCH}."
+            fi
+            {
+              echo "outcome=${outcome}"
+              echo "details=${details}"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # If we get here, histories diverged. Do not rewrite by default.
+          # Only do destructive reset when manually dispatched with explicit force=true.
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" && "${FORCE_INPUT}" == "true" ]]; then
+            # Extra guardrail: if an upstream-sync PR is already open, keep the safe review path
+            # and skip destructive reset until that PR is resolved.
+            existing_sync_pr_url="$(gh pr list \
+              --state open \
+              --base "${TARGET_BRANCH}" \
+              --label "upstream-sync" \
+              --json url \
+              --jq '.[0].url // empty')"
+            if [[ -n "${existing_sync_pr_url}" ]]; then
+              {
+                echo "outcome=force-skipped-open-pr"
+                echo "details=Force reset skipped because an upstream-sync PR is already open."
+                echo "pr_url=${existing_sync_pr_url}"
+              } >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            git reset --hard "upstream/${UPSTREAM_BRANCH}"
+            git push --force-with-lease origin "${TARGET_BRANCH}"
+            {
+              echo "outcome=force-reset"
+              echo "details=Force reset requested; ${TARGET_BRANCH} now matches upstream/${UPSTREAM_BRANCH}."
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Non-destructive fallback: if an upstream-sync PR already exists, reuse it and skip
+          # creating a new branch/PR. This avoids duplicate sync PRs when divergence persists.
+          existing_sync_pr_url="$(gh pr list \
+            --state open \
+            --base "${TARGET_BRANCH}" \
+            --label "upstream-sync" \
+            --json url,headRefName \
+            --jq 'map(select(.headRefName | startswith("upstream-sync/")))[0].url // empty')"
+          if [[ -n "${existing_sync_pr_url}" ]]; then
+            {
+              echo "outcome=pr-already-open"
+              echo "details=Existing upstream-sync PR is already open; skipped new PR creation."
+              echo "pr_url=${existing_sync_pr_url}"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # No open sync PR exists, so create a timestamped branch from upstream/main and open one.
+          branch="upstream-sync/$(date -u +%Y%m%d-%H%M%S)"
+          git checkout -B "${branch}" "upstream/${UPSTREAM_BRANCH}"
+          git push --set-upstream origin "${branch}"
+
+          existing_pr_number="$(gh pr list \
+            --state open \
+            --head "${branch}" \
+            --base "${TARGET_BRANCH}" \
+            --json number \
+            --jq '.[0].number // empty')"
+
+          if [[ -n "${existing_pr_number}" ]]; then
+            pr_url="$(gh pr view "${existing_pr_number}" --json url --jq '.url')"
+            outcome="pr-already-open"
+            details="Open upstream sync PR already exists for ${branch}."
+          else
+            pr_body="$(printf 'Automated upstream sync from %s@%s.\n\nThis branch was created because fast-forward was not possible on %s.\nReview and merge if desired.\n' "${UPSTREAM_REPO}" "${UPSTREAM_BRANCH}" "${TARGET_BRANCH}")"
+            pr_url="$(gh pr create \
+              --base "${TARGET_BRANCH}" \
+              --head "${branch}" \
+              --title "chore: sync upstream ${UPSTREAM_BRANCH} ($(date -u +%Y-%m-%d))" \
+              --body "${pr_body}" \
+              --label "upstream-sync")"
+            outcome="pr-opened"
+            details="Fast-forward not possible; opened PR for manual review."
+          fi
+
+          {
+            echo "outcome=${outcome}"
+            echo "details=${details}"
+            echo "pr_url=${pr_url}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Write workflow summary
+        if: always()
+        run: |
+          {
+            echo "## Upstream sync result"
+            echo ""
+            echo "- Outcome: ${{ steps.sync.outputs.outcome }}"
+            echo "- Details: ${{ steps.sync.outputs.details }}"
+            if [ -n "${{ steps.sync.outputs.pr_url }}" ]; then
+              echo "- PR: ${{ steps.sync.outputs.pr_url }}"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

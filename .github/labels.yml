@@ -1,0 +1,89 @@
+# Type
+- name: bug
+  color: d73a4a
+  description: Something isn't working
+- name: enhancement
+  color: a2eeef
+  description: New feature or request
+- name: documentation
+  color: 0075ca
+  description: Improvements or additions to documentation
+- name: question
+  color: d876e3
+  description: Further information is requested
+- name: chore
+  color: cfd3d7
+  description: Maintenance tasks and housekeeping
+- name: refactor
+  color: c2e0c6
+  description: Code changes that neither fix a bug nor add a feature
+
+# Dependencies / security
+- name: dependencies
+  color: 0366d6
+  description: Dependency updates
+- name: security
+  color: ee0701
+  description: Security fixes and hardening
+
+# Area
+- name: area:frontend
+  color: 1d76db
+  description: Vue SPA in src/
+- name: area:infra
+  color: 5319e7
+  description: Docker, Caddy, deployment under infra/
+- name: area:server-app
+  color: 0e8a16
+  description: Electron launcher in server-app/
+- name: area:server-app-tauri
+  color: 006b75
+  description: Tauri launcher in server-app-tauri/
+- name: area:agent-harness
+  color: fbca04
+  description: LLM agent harness in agent-harness/
+- name: area:ci
+  color: bfd4f2
+  description: GitHub Actions / CI / release pipelines
+- name: area:docs
+  color: c5def5
+  description: Documentation and docs tooling
+
+# Language
+- name: lang:typescript
+  color: 3178c6
+  description: TypeScript code and build changes
+- name: lang:vue
+  color: 41b883
+  description: Vue components and frontend behavior
+- name: lang:rust
+  color: dea584
+  description: Rust and Cargo changes
+
+# Status / triage
+- name: needs-triage
+  color: ededed
+  description: Needs initial triage
+- name: good first issue
+  color: 7057ff
+  description: Good for newcomers
+- name: help wanted
+  color: 008672
+  description: Extra attention is needed
+- name: wontfix
+  color: ffffff
+  description: This will not be worked on
+- name: duplicate
+  color: cfd3d7
+  description: This issue or pull request already exists
+- name: invalid
+  color: e4e669
+  description: This doesn't seem right
+
+# Upstream / fork specifics
+- name: upstream-sync
+  color: fef2c0
+  description: Tracks merges from koush/manage.scrypted.app
+- name: fork-only
+  color: f9d0c4
+  description: Change that should not be upstreamed
