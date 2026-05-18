@@ -21,6 +21,15 @@ Includes detailed findings, recommendations, and next steps.
 
 Includes validation results, merge readiness assessment, and PR creation instructions.
 
+### 📊 [PROGRESS_REPORT_TASK_8_FINAL_CLEANUP.md](./PROGRESS_REPORT_TASK_8_FINAL_CLEANUP.md) (8K)
+**Final repository cleanup plan and PR creation guide:**
+- Task 8: Create and merge 3 PRs in priority order
+- Complete action checklist for cleanup
+- Branch status summary and validation results
+- Instructions for closing superseded PRs (#9, #7, #12, #31, #32)
+
+Includes PR URLs, merge readiness assessment, and estimated completion time.
+
 ### 📋 [TASK_PROGRESS_SUMMARY.md](./TASK_PROGRESS_SUMMARY.md) (12K)
 **Summary of Parts A-D from earlier session:**
 - Part A: PR #9 rebase guide
