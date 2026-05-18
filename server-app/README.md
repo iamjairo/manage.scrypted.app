@@ -2,8 +2,6 @@
 
 Desktop launcher for Scrypted on Linux built with Electron + Vue 3 + Vuetify. It provides a simple operations UI for container power control, status/IP visibility, log streaming, and an integrated shell terminal for advanced commands.
 
-![Screenshot placeholder](./docs/screenshot-placeholder.png)
-
 ## Prerequisites
 
 - Linux host
