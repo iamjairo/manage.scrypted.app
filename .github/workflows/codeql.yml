@@ -35,7 +35,7 @@ jobs:
           # fails because the directory is missing, this matrix entry is a
           # no-op (steps.guard.outputs.skip will be 'true').
           - language: rust
-            build-mode: manual
+            build-mode: none
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -57,17 +57,6 @@ jobs:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
           queries: security-and-quality
-
-      - name: Set up Rust (Rust matrix only)
-        if: steps.guard.outputs.skip != 'true' && matrix.language == 'rust'
-        run: |
-          rustup toolchain install stable --profile minimal
-          rustup default stable
-
-      - name: Build Rust (Rust matrix only)
-        if: steps.guard.outputs.skip != 'true' && matrix.language == 'rust'
-        working-directory: server-app-tauri/src-tauri
-        run: cargo build --release --locked || cargo build --release
 
       - name: Perform CodeQL Analysis
         if: steps.guard.outputs.skip != 'true'
