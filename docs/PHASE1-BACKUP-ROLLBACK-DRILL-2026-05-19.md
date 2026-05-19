@@ -28,6 +28,22 @@ sha256sum /tmp/phase1-drill/infra-config-backup-2026-05-19.tgz \
 tar -xzf /tmp/phase1-drill/infra-config-backup-2026-05-19.tgz \
   -C /tmp/phase1-drill/restore-target
 
+mkdir -p /tmp/phase1-drill/rollback-sim
+cp -R /home/runner/work/manage.scrypted.app/manage.scrypted.app/infra \
+  /tmp/phase1-drill/rollback-sim/
+
+# restore archived config artifacts into rollback simulation copy
+cp /tmp/phase1-drill/restore-target/infra/Caddyfile \
+  /tmp/phase1-drill/rollback-sim/infra/Caddyfile
+cp /tmp/phase1-drill/restore-target/infra/Caddyfile.lan \
+  /tmp/phase1-drill/rollback-sim/infra/Caddyfile.lan
+cp /tmp/phase1-drill/restore-target/infra/Caddyfile.advanced \
+  /tmp/phase1-drill/rollback-sim/infra/Caddyfile.advanced
+cp /tmp/phase1-drill/restore-target/infra/docker-compose.yml \
+  /tmp/phase1-drill/rollback-sim/infra/docker-compose.yml
+cp /tmp/phase1-drill/restore-target/infra/README.md \
+  /tmp/phase1-drill/rollback-sim/infra/README.md
+
 cd /tmp/phase1-drill/rollback-sim/infra
 docker compose config >/tmp/phase1-drill/compose-config.after.txt
 diff -u /tmp/phase1-drill/compose-config.before.txt \

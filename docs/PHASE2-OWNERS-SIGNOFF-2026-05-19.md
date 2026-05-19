@@ -14,6 +14,7 @@ This assignment satisfies Phase 1 Gate 4 requirement for named owners before Pha
 
 - Current ownership is intentionally centralized for immediate Phase 1 closure.
 - Before Track A-D implementation begins, assign at least one additional track-level owner/reviewer to reduce single-owner execution risk.
+- **Phase 2 start gate**: do not begin Track A or Track C implementation until that secondary owner assignment is explicitly recorded in this file.
 
 ## Acceptance requirements
 
