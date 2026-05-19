@@ -8,13 +8,13 @@
           :expand-icon="getFaPrefix('fa-caret-down')">
           <v-expansion-panel-title v-if="totalExpansionPanels > 1"
             style="min-height: unset; height: 24px; font-size: .8rem; font-weight: 450; text-transform: uppercase;"
-            :color="selectedSettingGroup && group?.title === selectedSettingGroup?.title ? 'deep-purple' : undefined">{{
+            :color="selectedSettingGroup && group?.title === selectedSettingGroup?.title ? 'primary' : undefined">{{
               getTitle(group.title) }}</v-expansion-panel-title>
           <v-tabs
             v-if="selectedSettingGroup && group.title === selectedSettingGroup?.title && group.subgroups?.length > 1"
             v-model="selectedSettingSubgroup" mandatory density="compact" grow center-active show-arrows
             :prev-icon="getFaPrefix('fa-caret-left')" :next-icon="getFaPrefix('fa-caret-right')"
-            :bg-color="dark ? 'deep-purple' : undefined" :color="!dark ? 'deep-purple' : undefined">
+            :bg-color="dark ? 'primary' : undefined" :color="!dark ? 'primary' : undefined">
             <template v-for="subgroup of group.subgroups">
               <v-tab :value="subgroup" size="small">{{
                 getTitle(subgroup.title) }}</v-tab>

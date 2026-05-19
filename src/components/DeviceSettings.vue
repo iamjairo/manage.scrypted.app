@@ -23,7 +23,7 @@
             :expand-icon="getFaPrefix('fa-caret-down')">
             <v-expansion-panel-title
               style="min-height: unset; height: 24px; font-size: .8rem; font-weight: 450; text-transform: uppercase;"
-              :color="'Extensions' === slotProps.selectedSettingGroup?.title ? 'deep-purple' : undefined">Extensions</v-expansion-panel-title>
+              :color="'Extensions' === slotProps.selectedSettingGroup?.title ? 'primary' : undefined">Extensions</v-expansion-panel-title>
             <v-expansion-panel-text>
               <Extensions :id="id" v-if="slotProps.selectedSettingGroup?.title === 'Extensions'">
               </Extensions>

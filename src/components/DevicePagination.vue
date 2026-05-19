@@ -2,7 +2,7 @@
     <v-chip-group class="ma-4" :model-value="selectedDeviceGroups" multiple column>
         <v-chip v-for="deviceGroup in deviceGroups" :key="deviceGroup"
             :prepend-icon="deviceGroup === other ? typeToIcon(ScryptedDeviceType.Unknown) : typeToIcon(deviceGroup)"
-            size="small" :color="isDefaultFilter ? 'deep-purple-accent-4' : 'info'"
+            size="small" :color="isDefaultFilter ? 'primary' : 'info'"
             @click="e => clickChip(deviceGroup, e)" variant="flat" :rounded="0" class="pl-3 ma-0"> {{
                 deviceGroup
             }} ({{devices.filter(d => (hasFixedPhysicalLocation(d.type!) ? d.type : other) ===
