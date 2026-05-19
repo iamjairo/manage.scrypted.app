@@ -73,9 +73,34 @@ function clear() {
 const terminal = ref<HTMLElement>();
 
 const dark = isDark();
+// Two explicit themes so the terminal blends with mediamtxNeon (slate-900 +
+// cyan-400) rather than xterm's default stark black-on-black. ANSI colors are
+// the Tailwind palette tuned for legibility on the slate-900 background.
 function getTheme() {
   return dark.value
-    ? undefined
+    ? {
+      selectionBackground: '#06b6d488', // cyan-400, semi-transparent
+      foreground:          '#e2e8f0',    // slate-200
+      background:          '#0f172a',    // slate-900 — matches dashboard surface
+      cursor:              '#06b6d4',    // cyan-400
+      cursorAccent:        '#0f172a',
+      black:         '#1e293b',
+      red:           '#f87171',
+      green:         '#4ade80',
+      yellow:        '#facc15',
+      blue:          '#60a5fa',
+      magenta:       '#c084fc',
+      cyan:          '#22d3ee',
+      white:         '#f1f5f9',
+      brightBlack:   '#475569',
+      brightRed:     '#fca5a5',
+      brightGreen:   '#86efac',
+      brightYellow:  '#fde047',
+      brightBlue:    '#93c5fd',
+      brightMagenta: '#d8b4fe',
+      brightCyan:    '#67e8f9',
+      brightWhite:   '#ffffff',
+    }
     : {
       selectionBackground: '#0000ff55',
       foreground: "black",
@@ -86,6 +111,9 @@ function getTheme() {
 
 const term = new Terminal({
   theme: getTheme(),
+  // Mirror --font-mono from theme.scss so the terminal matches the rest of the
+  // app's monospace surfaces (code blocks, entity IDs, etc.).
+  fontFamily: "'SF Mono', 'Fira Code', ui-monospace, Menlo, Monaco, Consolas, monospace",
   convertEol: true,
   fontSize: 12,
 });
