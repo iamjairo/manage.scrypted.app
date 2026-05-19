@@ -42,7 +42,7 @@
                         hint="Host and port of a self hosted installation. E.g. scrypted.example.com or 192.168.2.100:10443"
                         persistent-hint placeholder="scrypted.example.com"></v-text-field>
 
-                    <div class="pl-8 pr-8 pb-2" style="color: red;" v-if="loginResult">{{ loginResult }}</div>
+                    <div class="pl-8 pr-8 pb-2 text-error" v-if="loginResult">{{ loginResult }}</div>
 
                     <v-card-actions>
                         <v-spacer></v-spacer>

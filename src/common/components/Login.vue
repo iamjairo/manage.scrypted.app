@@ -25,7 +25,7 @@
           persistent-placeholder>
         </v-text-field>
 
-        <div class="pl-8 pr-8 pb-2" style="color: red;" v-if="loginResult">{{ loginResult }}</div>
+        <div class="pl-8 pr-8 pb-2 text-error" v-if="loginResult">{{ loginResult }}</div>
 
         <v-card-actions>
           <v-btn :icon="getFaPrefix('fa-home')" v-if="isScryptedCloudHostname()" size="small"
@@ -141,21 +141,21 @@ async function doLogin() {
 .scrypted-title {
   font-weight: 500 !important;
   font-size: 1.5rem !important;
-  font-family: Quicksand, sans-serif !important;
+  font-family: var(--font-body), sans-serif !important;
   text-transform: uppercase !important;
 }
 
 .scrypted-subtitle {
   font-weight: 500 !important;
   font-size: 1.0rem !important;
-  font-family: Quicksand, sans-serif !important;
+  font-family: var(--font-body), sans-serif !important;
   text-transform: uppercase;
 }
 
 .scrypted-subtitle2 {
   font-weight: 500 !important;
   font-size: .75rem !important;
-  font-family: Quicksand, sans-serif !important;
+  font-family: var(--font-body), sans-serif !important;
   text-transform: uppercase;
 }
 </style>
