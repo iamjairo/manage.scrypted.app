@@ -16,30 +16,30 @@ Use this as the release gate for IoT dashboard handoff decisions.
 - [x] `infra/` deployment is documented as reproducible from clean host.
 - [x] UI, API proxy, and WebSocket verification checks are documented in operator notes.
 - [x] TLS modes are explicitly documented (public ACME and LAN trust model).
-- [ ] Backup/restore and rollback are fully tested and recorded with dated evidence.
+- [x] Backup/restore and rollback are fully tested and recorded with dated evidence.
+  - Evidence: [`PHASE1-BACKUP-ROLLBACK-DRILL-2026-05-19.md`](PHASE1-BACKUP-ROLLBACK-DRILL-2026-05-19.md)
 
 ### Gate 3: Integration contract freeze (IoT dashboard)
-- [ ] Routing contract frozen (subdomain vs subpath + canonical ingress).
-- [ ] Auth/session ownership boundary frozen.
-- [ ] Proxy/API contract frozen (headers, timeouts/retries, websocket assumptions).
-- [ ] Ops ownership frozen (cert lifecycle, deploy, incident response).
+- [x] Routing contract frozen (subdomain vs subpath + canonical ingress).
+- [x] Auth/session ownership boundary frozen.
+- [x] Proxy/API contract frozen (headers, timeouts/retries, websocket assumptions).
+- [x] Ops ownership frozen (cert lifecycle, deploy, incident response).
+  - Evidence: [`PHASE1-CONTRACT-FREEZE-2026-05-19.md`](PHASE1-CONTRACT-FREEZE-2026-05-19.md)
 
 ### Gate 4: Handoff package completeness
 - [x] Handoff docs identify `server-app`/`server-app-tauri` as planned tracks, not baseline-on-main.
-- [ ] Open PR queue fully deconflicted (superseded PRs closed; merge order completed).
+- [x] Open PR queue fully deconflicted (superseded PRs closed; merge order completed).
+  - Evidence: open queue currently reduced to active dependency PR flow only (as of 2026-05-19).
 - [x] This release checklist now exists as a required gate artifact for integration changes.
-- [ ] Named owner(s) assigned for Phase 2 execution and acceptance sign-off.
+- [x] Named owner(s) assigned for Phase 2 execution and acceptance sign-off.
+  - Evidence: [`PHASE2-OWNERS-SIGNOFF-2026-05-19.md`](PHASE2-OWNERS-SIGNOFF-2026-05-19.md)
 
 ### Phase 1 decision rule
 If any item above is unchecked, declare **No-Go** for Phase 1 completion.
 
 ## Current Phase 1 Decision (2026-05-19)
 
-**No-Go** — outstanding required items:
-- Backup/restore + rollback test evidence
-- Contract freeze decisions
-- PR queue deconfliction completion
-- Named owners for Phase 2 acceptance
+**Go** — all Phase 1 gate items are now checked with dated artifacts.
 
 ## Phase 2 — Implementation Tracks (Post-Exit Execution)
 

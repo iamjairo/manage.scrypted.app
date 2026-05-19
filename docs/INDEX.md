@@ -10,6 +10,7 @@ This index is the operator/team entrypoint for current status, merge sequencing,
 
 1. **Current status**
    - [`STATUS-2026-05-18.md`](STATUS-2026-05-18.md)
+   - [`STATUS-2026-05-19.md`](STATUS-2026-05-19.md)
 
 2. **Immediate merge/closure actions**
    - [`MERGE-RUNBOOK-2026-05-18.md`](MERGE-RUNBOOK-2026-05-18.md)
@@ -17,6 +18,9 @@ This index is the operator/team entrypoint for current status, merge sequencing,
 3. **IoT Dashboard integration handoff**
    - [`TEAM-HANDOFF-IOT-DASHBOARD.md`](TEAM-HANDOFF-IOT-DASHBOARD.md)
    - [`HANDOFF-GO-NO-GO-CHECKLIST.md`](HANDOFF-GO-NO-GO-CHECKLIST.md)
+   - [`PHASE1-CONTRACT-FREEZE-2026-05-19.md`](PHASE1-CONTRACT-FREEZE-2026-05-19.md)
+   - [`PHASE1-BACKUP-ROLLBACK-DRILL-2026-05-19.md`](PHASE1-BACKUP-ROLLBACK-DRILL-2026-05-19.md)
+   - [`PHASE2-OWNERS-SIGNOFF-2026-05-19.md`](PHASE2-OWNERS-SIGNOFF-2026-05-19.md)
 
 ---
 

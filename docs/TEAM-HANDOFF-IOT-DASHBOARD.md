@@ -26,9 +26,8 @@ Before declaring handoff readiness, complete:
 
 ## What remains in-flight (as of handoff)
 
-- Merge readiness/closure sequencing across remaining PRs.
-- Docs rebase merge with final path-reference sanity against live `main`.
-- Legacy PR retirement after superseding merges.
+- Phase 2 execution tracks (A-D) per the checklist.
+- Integration-level test expansion and hardening evidence.
 
 ## Integration contract recommendations
 
@@ -43,6 +42,11 @@ Define and freeze the following before broader rollout:
    - required headers, websocket expectations, timeouts
 4. **Ops ownership contract**
    - who owns cert lifecycle, rollout, rollback, monitoring
+
+Status (2026-05-19):
+
+- Contract freeze completed and recorded in:
+  - [`PHASE1-CONTRACT-FREEZE-2026-05-19.md`](PHASE1-CONTRACT-FREEZE-2026-05-19.md)
 
 ## Delivery phases
 
