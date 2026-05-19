@@ -16,6 +16,7 @@ This index is the operator/team entrypoint for current status, merge sequencing,
 
 3. **IoT Dashboard integration handoff**
    - [`TEAM-HANDOFF-IOT-DASHBOARD.md`](TEAM-HANDOFF-IOT-DASHBOARD.md)
+   - [`HANDOFF-GO-NO-GO-CHECKLIST.md`](HANDOFF-GO-NO-GO-CHECKLIST.md)
 
 ---
 

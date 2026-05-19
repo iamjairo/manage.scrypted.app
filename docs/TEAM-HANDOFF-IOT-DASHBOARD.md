@@ -4,6 +4,12 @@
 
 Platform engineers, integration engineers, and technical leads onboarding this repository into the IoT Dashboard program.
 
+## Required release gate
+
+Before declaring handoff readiness, complete:
+
+- [`HANDOFF-GO-NO-GO-CHECKLIST.md`](HANDOFF-GO-NO-GO-CHECKLIST.md)
+
 ## What this repo now provides
 
 - Stable fork baseline with repaired dependency auto-merge automation.
