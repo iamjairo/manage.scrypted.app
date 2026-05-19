@@ -26,8 +26,8 @@ Before declaring handoff readiness, complete:
 
 ## What remains in-flight (as of handoff)
 
-- Phase 2 execution tracks (C-D) per the checklist.
-- Integration-level test expansion and hardening evidence.
+- End-of-cycle integration test execution evidence (Track C final close).
+- Formal handoff acceptance review execution (Track D final close).
 
 Phase 2A status (2026-05-19):
 
@@ -38,6 +38,19 @@ Phase 2B status (2026-05-19):
 
 - Track B runtime decision/policy freeze completed:
   - [`PHASE2B-RUNTIME-DECISION-2026-05-19.md`](PHASE2B-RUNTIME-DECISION-2026-05-19.md)
+
+Phase 2C status (2026-05-19):
+
+- Hardening policy/gates and integration validation package prepared:
+  - [`PHASE2C-HARDENING-2026-05-19.md`](PHASE2C-HARDENING-2026-05-19.md)
+  - [`../infra/OPS-RUNBOOK.md`](../infra/OPS-RUNBOOK.md)
+- Live-host integration testing is intentionally deferred to end-of-cycle execution.
+
+Phase 2D status (2026-05-19):
+
+- Developer onboarding/release enablement package prepared:
+  - [`PHASE2D-RELEASE-ENABLEMENT-2026-05-19.md`](PHASE2D-RELEASE-ENABLEMENT-2026-05-19.md)
+- Final acceptance review execution is deferred until end-of-cycle validation evidence is complete.
 
 ## Integration contract recommendations
 

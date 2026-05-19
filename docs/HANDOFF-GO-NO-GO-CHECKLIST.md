@@ -58,16 +58,20 @@ If any item above is unchecked, declare **No-Go** for Phase 1 completion.
   - Evidence: [`PHASE2B-RUNTIME-DECISION-2026-05-19.md`](PHASE2B-RUNTIME-DECISION-2026-05-19.md)
 
 ### Track C: Integration QA and security hardening
-- [ ] Add integration-level validation for routing/auth/API/WS contracts.
+- [x] Add integration-level validation for routing/auth/API/WS contracts.
 - [ ] Validate failure and rollback scenarios in realistic homelab conditions.
-- [ ] Enforce security posture gates (CodeQL/Scorecard/review) on integration-critical PRs.
-- [ ] Confirm supply-chain governance policy and review flow.
+- [x] Enforce security posture gates (CodeQL/Scorecard/review) on integration-critical PRs.
+- [x] Confirm supply-chain governance policy and review flow.
+  - Evidence: [`PHASE2C-HARDENING-2026-05-19.md`](PHASE2C-HARDENING-2026-05-19.md), [`../infra/OPS-RUNBOOK.md`](../infra/OPS-RUNBOOK.md)
+  - Deferred execution note: end-of-cycle live integration testing remains required before Track C final close.
 
 ### Track D: Release and developer enablement
-- [ ] Publish developer-ready onboarding for dashboard team (contracts + runbooks).
-- [ ] Provide environment matrix (LAN/public, reverse-proxy modes, supported topologies).
-- [ ] Establish versioning/release cadence aligned to upstream sync strategy.
+- [x] Publish developer-ready onboarding for dashboard team (contracts + runbooks).
+- [x] Provide environment matrix (LAN/public, reverse-proxy modes, supported topologies).
+- [x] Establish versioning/release cadence aligned to upstream sync strategy.
 - [ ] Run formal handoff acceptance review with sign-off criteria.
+  - Evidence: [`PHASE2D-RELEASE-ENABLEMENT-2026-05-19.md`](PHASE2D-RELEASE-ENABLEMENT-2026-05-19.md)
+  - Deferred execution note: formal acceptance review runs after end-of-cycle integration testing evidence is complete.
 
 ## Guardrails
 - Treat **contract freeze** as the real milestone, not just successful Docker+Caddy startup.

@@ -23,6 +23,8 @@ This index is the operator/team entrypoint for current status, merge sequencing,
    - [`PHASE2-OWNERS-SIGNOFF-2026-05-19.md`](PHASE2-OWNERS-SIGNOFF-2026-05-19.md)
    - [`PHASE2A-UI-REMASTER-2026-05-19.md`](PHASE2A-UI-REMASTER-2026-05-19.md)
    - [`PHASE2B-RUNTIME-DECISION-2026-05-19.md`](PHASE2B-RUNTIME-DECISION-2026-05-19.md)
+   - [`PHASE2C-HARDENING-2026-05-19.md`](PHASE2C-HARDENING-2026-05-19.md)
+   - [`PHASE2D-RELEASE-ENABLEMENT-2026-05-19.md`](PHASE2D-RELEASE-ENABLEMENT-2026-05-19.md)
 
 ---
 
@@ -30,6 +32,7 @@ This index is the operator/team entrypoint for current status, merge sequencing,
 
 - **Docker + Caddy operator notes**
   - [`DOCKER-CADDY-OPS-NOTES.md`](DOCKER-CADDY-OPS-NOTES.md)
+  - [`../infra/OPS-RUNBOOK.md`](../infra/OPS-RUNBOOK.md)
 
 - **Server app track summary (Electron/Tauri)**
   - [`SERVER-APP-TRACK-SUMMARY.md`](SERVER-APP-TRACK-SUMMARY.md)
