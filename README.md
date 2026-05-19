@@ -1,101 +1,100 @@
-# manage.scrypted.app — operator fork (iamjairo)
+# manage.scrypted.app
 
-> Fork of [`koush/manage.scrypted.app`](https://github.com/koush/manage.scrypted.app) used as an operational UI + deployment integration surface for homelab and IoT dashboard workflows.
+This repository is the canonical working fork of `manage.scrypted.app` for current IoT Dashboard integration and developer handoff work.
 
-## Operational intent
+## Current purpose
 
-This repo is maintained as:
+This repo is being used as the active baseline for:
+- mainline cleanup and consolidation
+- integration planning for the IoT Dashboard
+- security and quality triage
+- developer handoff on a clean canonical branch
 
-1. **UI customization surface** for Scrypted management UX.
-2. **Deployment integration surface** via Docker + Caddy (`infra/`).
-3. **Governance surface** for dependency/security automation (`.github/` workflows).
-4. **Team handoff/documentation surface** for dashboard integration (`docs/`).
+## Canonical branch
 
-This is not just an app repo; it is an operations-enabled fork.
+Use `main` as the only canonical source of truth.
 
----
+Historical branch-era work, competing agent outputs, and archived audit materials should not be treated as active implementation guidance unless they have been promoted into the current documentation set under `docs/`.
 
-## Current status snapshot (2026-05-18)
+## What changed
 
-### Completed today
-- ✅ **PR #37 merged**: repaired broken Dependabot auto-merge workflow (`SyntaxError: Unexpected token 'catch'` fixed on `main`).
-- ✅ Dependabot audit workflow branch prepared (`chore/dependabot-audit`) with explicit minimal permissions and `actions/github-script@v7`.
-- ✅ Dependabot path hygiene updated (`chore/repo-hygiene-combined`) for active paths only.
-- ✅ Docs rebase track validated (`fix/pr-9-rebase`) as replacement for legacy PR #9.
-- ✅ Major-upgrades test track kept draft (`#34`) for diagnostics only.
+The repository has been cleaned up to reduce ambiguity for new developers:
 
-### Important operational note
-Some docs/PR streams reference `server-app/` and `server-app-tauri/`.  
-If those directories are not yet on `main`, treat them as planned tracks until merged.
+- historical root-level audit/meta folders were removed from active repo structure
+- historical materials needed for traceability were preserved under `.github/docs/archive-*`
+- canonical handoff, cleanup, and integration documents were added to `docs/`
+- closed/superseded branch-era work was separated from the current mainline baseline
 
----
+## Start here
 
-## Repo layout
+If you are joining this repo for implementation or integration work, read these documents first:
 
-| Path | Operator purpose |
-|------|------------------|
-| `src/` | Vue + TypeScript management UI fork surface. |
-| `infra/` | Compose + Caddy deployment assets and runbook docs. |
-| `agent-harness/` | LLM/script-generation harness for Scrypted workflows. |
-| `.github/` | CI, Dependabot, policy automation, templates, governance. |
-| `docs/` | Status, handoff, ops notes, integration guidance. |
+1. `docs/DEVELOPER-INTEGRATION-STARTER-2026-05-19.md`
+2. `docs/IOT-DASHBOARD-INTEGRATION-BOUNDARY-2026-05-19.md`
+3. `docs/MAINLINE-REALITY-CHECK-2026-05-19.md`
+4. `docs/SECURITY-AND-QUALITY-TRIAGE-2026-05-19.md`
+5. `docs/KICKOFF-CHECKLIST-2026-05-19.md`
 
----
+For the broader documentation map, see:
 
-## High-signal workflows
+- `docs/INDEX.md`
 
-- **Auto-merge Dependabot (patch/minor policy)**  
-  Enforces guarded dependency auto-merge behavior.
-- **Dependabot audit log**  
-  Creates audit issues for merged Dependabot PRs.
-- **CodeQL / Scorecard**  
-  Security and supply-chain posture checks.
-- **Label/metadata governance**  
-  Maintains contributor and triage hygiene.
+## Working assumptions
 
----
+When working in this repository:
 
-## Deployment entrypoint
+- `main` is the only canonical branch for current development kickoff
+- current code on `main` takes precedence over older branch-era narratives
+- a documented idea is not the same as an implemented feature
+- archived materials exist for traceability, not as default implementation guidance
+- optional or deferred tracks should not be treated as blockers unless explicitly stated
 
-Use [`infra/README.md`](infra/README.md) as canonical deployment guide.
+## Optional / deferred areas
 
-At a high level:
+Some areas in the repository may represent optional, experimental, or deferred work rather than the immediate critical path.
 
-- Caddy terminates TLS and routes UI + API/WS traffic.
-- Compose orchestrates Scrypted + proxy.
-- Subdomain/LAN/subpath variants are supported by Caddy config variants.
-- See operator notes: [`docs/DOCKER-CADDY-OPS-NOTES.md`](docs/DOCKER-CADDY-OPS-NOTES.md).
+In particular:
+- `Caddy/` should be treated as optional/experimental unless explicitly adopted as part of the canonical runtime path
 
----
+## Security and quality
 
-## Team handoff docs
+Current security and quality follow-up is tracked through:
 
-- [`docs/STATUS-2026-05-18.md`](docs/STATUS-2026-05-18.md)
-- [`docs/TEAM-HANDOFF-IOT-DASHBOARD.md`](docs/TEAM-HANDOFF-IOT-DASHBOARD.md)
-- [`docs/DOCKER-CADDY-OPS-NOTES.md`](docs/DOCKER-CADDY-OPS-NOTES.md)
-- [`docs/SERVER-APP-TRACK-SUMMARY.md`](docs/SERVER-APP-TRACK-SUMMARY.md)
+- `docs/SECURITY-AND-QUALITY-TRIAGE-2026-05-19.md`
+- `docs/SECURITY-FOLLOW-UP-CHECKLIST-2026-05-19.md`
 
-These are intended for operators, reviewers, and integration teams—not end users.
+These documents should be used to distinguish:
+- core-path issues
+- optional-path issues
+- blockers vs non-blocking follow-up items
 
----
+## Archived materials
 
-## Recommended merge/closure sequence (operator runbook)
+Historical audits, competing agent outputs, and removed root-level meta content have been archived for traceability under locations such as:
 
-1. Merge Dependabot audit workflow PR.
-2. Merge repo hygiene combined PR.
-3. Merge docs rebase PR (after README link sanity check against current `main` tree).
-4. Close superseded legacy PRs (`#7`, `#9`, `#12`, and stale meta PRs).
-5. Keep `#34` draft/do-not-merge unless major-upgrade migration sprint is approved.
+- `.github/docs/archive-2026-05-18/`
+- `.github/docs/archive-2026-05-19/`
 
----
+Use archived materials only when you need historical context or traceability. Do not treat them as canonical implementation instructions unless a current document in `docs/` explicitly references them.
 
-## Upstream relationship
+## Developer kickoff summary
 
-Upstream: [`koush/manage.scrypted.app`](https://github.com/koush/manage.scrypted.app)  
-Fork policy: keep upstream-compatible where practical; isolate fork-only operational changes with explicit PR context.
+For senior developers joining the project:
 
----
+- validate actual implementation state from current `main`
+- align work to the documented integration boundary
+- flag documentation/code mismatches early
+- avoid reviving abandoned branch-specific tracks without an explicit decision
 
-## Security
+## Repository status
 
-Report vulnerabilities privately via GitHub Security Advisories for this repo or upstream, depending on ownership of affected code path.
+As of 2026-05-19, this repository has been prepared for dev-team kickoff with:
+- a cleaned canonical `main`
+- archived historical materials
+- consolidated handoff documentation
+- kickoff and security follow-up checklists
+- reduced branch/PR ambiguity
+
+## Maintenance note
+
+If the repo direction changes, update this README and `docs/INDEX.md` together so the repository front door stays aligned with the actual current operating model.
