@@ -11,16 +11,19 @@ The repository is being prepared as the canonical fork for IoT Dashboard integra
 1. `docs/DEVELOPER-INTEGRATION-STARTER-2026-05-19.md`  
    Start here for the cleanest handoff overview of what this repo is, what is stable, what is deferred, and where to begin.
 
-2. `docs/IOT-DASHBOARD-INTEGRATION-BOUNDARY-2026-05-19.md`  
+2. `docs/DEVELOPER-REALITY-CLARIFICATION-2026-05-19.md`  
+   Direct, implementation-focused summary of what is actually present on `main` (real Vue 3 PWA, build pipeline, infra) vs what is not (integration bridge, Module Federation, React hooks). Executive-summary companion to the deep audit in `MAINLINE-REALITY-CHECK`.
+
+3. `docs/IOT-DASHBOARD-INTEGRATION-BOUNDARY-2026-05-19.md`  
    Defines the intended boundary between this repository and the downstream IoT Dashboard repository, including ownership, routing, auth/session, proxying, and first milestone guidance.
 
-3. `docs/MAINLINE-REALITY-CHECK-2026-05-19.md`  
+4. `docs/MAINLINE-REALITY-CHECK-2026-05-19.md`  
    Compares prior claims against what actually exists on `main`, helping the team avoid relying on branch-only narratives or speculative implementation status.
 
-4. `docs/SECURITY-AND-QUALITY-TRIAGE-2026-05-19.md`  
+5. `docs/SECURITY-AND-QUALITY-TRIAGE-2026-05-19.md`  
    Summarizes current security and quality posture, including dependency, workflow, and code-scanning considerations.
 
-5. `docs/REPO-CLEANUP-PLAN-2026-05-19.md`  
+6. `docs/REPO-CLEANUP-PLAN-2026-05-19.md`  
    Explains what was kept, archived, removed, deferred, and what cleanup actions remain or were completed.
 
 ---
@@ -29,6 +32,9 @@ The repository is being prepared as the canonical fork for IoT Dashboard integra
 
 - `docs/DEVELOPER-INTEGRATION-STARTER-2026-05-19.md`  
   Primary onboarding and handoff guide for the IoT Dashboard development team.
+
+- `docs/DEVELOPER-REALITY-CLARIFICATION-2026-05-19.md`  
+  Implementation-focused summary of what exists on `main` (Vue 3 PWA, build, infra) vs what does not (integration bridge, Module Federation, React hooks). Companion executive summary to the deep audit in `MAINLINE-REALITY-CHECK`.
 
 - `docs/IOT-DASHBOARD-INTEGRATION-BOUNDARY-2026-05-19.md`  
   Canonical integration boundary and ownership definition.
