@@ -10,6 +10,11 @@ This assignment satisfies Phase 1 Gate 4 requirement for named owners before Pha
 - **Track C owner (integration QA + security hardening)**: `@iamjairo`
 - **Track D owner (release enablement + onboarding)**: `@iamjairo`
 
+## Ownership risk control
+
+- Current ownership is intentionally centralized for immediate Phase 1 closure.
+- Before Track A-D implementation begins, assign at least one additional track-level owner/reviewer to reduce single-owner execution risk.
+
 ## Acceptance requirements
 
 Phase 2 is considered accepted only when:
